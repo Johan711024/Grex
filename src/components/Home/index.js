@@ -22,6 +22,7 @@ class HomePage extends Component {
         users: snapshot.val(),
       })
     })
+    console.log(this.state.users)
   }
   componentWillUnmount(){
     this.props.firebase.users().off();

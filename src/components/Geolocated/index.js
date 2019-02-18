@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import L from 'leaflet';
+import ReactDOMServer from 'react-dom/server';
+
 import { withFirebase } from '../Firebase';
+import Icon from './SVGIconComponent';
 
 class LocatedTwo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       browserCoords: null,
-      dbCoords: null
+      dbCoords: null,
+      users: [],
+      loading: false,
+      perc: 0,
+      markers: [],
     };
   }
 
@@ -44,7 +52,49 @@ class LocatedTwo extends Component {
     }
   };
 
+  getRandomNumber = () => {
+    return Math.floor(Math.random() * 100) + 1             
+  }
+
+  makeMarkers = (users, markers) => {
+
+    const userList = this.state.users;
+    const markerList = userList.map(user =>{
+        
+        return {latitude: user.position.latitude, longitude: user.position.longitude, username: user.username, perc: this.getRandomNumber() };
+    });
+
+    return markerList;
+
+  }
+
+  onListenForUsers() {    
+
+   
+
+    this.setState({ loading: true });
+    this.props.firebase.users().on('value', snapshot => {
+      
+      const userObject = snapshot.val();
+
+      if (userObject) {
+          //convert user list from snapshot
+          const userList = Object.keys(userObject).map(key => ({
+            ...userObject[key],
+            uid: key,
+          }));
+
+          this.setState({ users: userList, loading: false});
+      } else {
+        this.setState({ users: null, loading: false })
+      }
+    });
+    
+  }
+  
+
   getUserPositionFromDB = () => {
+    
     this.props.firebase
       .user(this.props.userId)
       .child("position")
@@ -66,6 +116,10 @@ class LocatedTwo extends Component {
   };
 
   componentDidMount() {
+ 
+
+    this.onListenForUsers();    
+
     this.getUserPositionFromDB();
     this.watchId = navigator.geolocation.watchPosition(
       this.updatePosition,
@@ -81,20 +135,21 @@ class LocatedTwo extends Component {
     );
   }
   componentWillUnmount() {
+    this.props.firebase.users().off();
+    
     navigator.geolocation.clearWatch(this.watchId);
   }
 
   render() {
-    const markers = [
-      { latitude: 59.316607, longitude: 18.034689 },
-      { latitude: 59.307496, longitude: 17.985272 },
-      { latitude: 59.305496, longitude: 17.985272 }
-    ];
-    markers.push({ ...this.state.browserCoords })
+    //console.log('logga: ' + JSON.stringify(this.state.users));
+    console.log('logga:  ' + JSON.stringify(this.makeMarkers()))
+    const markers = this.makeMarkers();
+    
     return (
       <div>
+      <UserList users={this.state.users} />
         {this.state.browserCoords ? (
-          <MyMap
+          <MyMap perc={this.state.perc}
             markers={markers}
             position={Object.values(this.state.browserCoords)}
             zoom={13}
@@ -106,11 +161,33 @@ class LocatedTwo extends Component {
           <Coords position={this.state.browserCoords} />
           <p>Coords from DB</p>
           <Coords position={this.state.dbCoords} />
-        </div>
+        </div>        
       </div>
     );
+    
   }
 }
+
+const UserList = ({ users }) => (
+  
+    <ul>
+    
+      {users.map(user => (
+        <UserItem 
+          key={user.uid} 
+          username={user.username} 
+          longitude={user.position.longitude}
+          latitude={user.position.latitude}
+        />
+      ))}
+    </ul>
+  );
+
+const UserItem = (props) => (
+    <div>
+        {props.username}, longitude {props.longitude} : latitude {props.latitude}
+    </div>
+);
 
 const Coords = props => (
   <div>
@@ -134,13 +211,17 @@ const MyMap = props => (
       attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
     />
-    {props.markers.map((marker,index) => (
-      <Marker key={index} position={Object.values(marker)}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
+    {props.markers.map((marker,index) => {
+        //const L = require('leaflet');
+        const customMarker = L.divIcon({ html: ReactDOMServer.renderToString(<Icon perc={marker.perc}/>), className: 'custom icon'})
+        return(
+      <Marker key={index} icon={customMarker}  position={[marker.latitude, marker.longitude]}>
+        <Popup >
+          {marker.username}.
         </Popup>
       </Marker>
-    ))}
+      )
+    })}
   </Map>
 );
 export default withFirebase(LocatedTwo);
