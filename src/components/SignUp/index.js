@@ -55,6 +55,7 @@ class SignUpFormBase extends Component {
             username,
             email,
             roles,
+            position: { latitude: 0, longitude: 0}
           })
           .then(() => {
             return this.props.firebase.doSendEmailVerification();
