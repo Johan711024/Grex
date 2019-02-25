@@ -145,6 +145,7 @@ class SignUpFormBase extends Component {
         </button>
 
         {error && <p>{error.message}</p>}
+        <Link to={ROUTES.SIGN_IN}>Back!</Link>
       </form>
     );
   }

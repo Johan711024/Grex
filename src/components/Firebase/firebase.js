@@ -103,11 +103,11 @@ class Firebase {
 
   messages = () => this.db.ref(`messages`);
 
-  // *** Geolocated API ***
+  // *** Event API ***
 
-  user_coordinates = uid => this.db.ref(`users_coordinates/${uid}`);
+  event = uid => this.db.ref(`events/${uid}`);
 
-  users_coordinates = () => this.db.ref(`users_coordinates`);
+  events = () => this.db.ref(`events`);
 }
 
 export default Firebase;

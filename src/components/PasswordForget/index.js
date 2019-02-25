@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+
+
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
@@ -61,6 +63,7 @@ class PasswordForgetFormBase extends Component {
         </button>
 
         {error && <p>{error.message}</p>}
+        <Link to={ROUTES.SIGN_IN}>Back!</Link>
       </form>
     );
   }

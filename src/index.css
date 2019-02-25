@@ -17,3 +17,32 @@ code {
   height: 400px;
   width: 100%;
 }
+
+/* 
+.container {
+  display: flex;
+  
+  background-color: black;
+
+  
+  min-height: 200vh;
+  
+  
+  
+  align-items: center;
+  
+  
+  
+  
+  padding: 0px;
+  
+}
+.item {
+  width: 30%;
+  height: 30%;
+  margin: auto;
+  background-color: white;
+  border: 1px solid #000;
+  border-radius: 25px;
+  padding: 2%;
+} */

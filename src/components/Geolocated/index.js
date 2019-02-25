@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
@@ -147,7 +147,7 @@ class LocatedTwo extends Component {
     
     return (
       <div>
-      <UserList users={this.state.users} />
+      {/* <UserList users={this.state.users} /> */}
         {this.state.browserCoords ? (
           <MyMap perc={this.state.perc}
             markers={markers}
@@ -155,13 +155,13 @@ class LocatedTwo extends Component {
             zoom={13}
           />
         ) : null}
-        <div>Geolocation</div>
+         {/*<div>Geolocation</div>
         <div>
           <p>Coords from Browser</p>
           <Coords position={this.state.browserCoords} />
           <p>Coords from DB</p>
           <Coords position={this.state.dbCoords} />
-        </div>        
+        </div>         */}
       </div>
     );
     
@@ -200,12 +200,17 @@ const Coords = props => (
   </div>
 );
 
-const MyMap = props => (
+const MyMap = props => {
+  
+  return (
   <Map
     zoomControl={false}
     scrollWheelZoom={false}
-    center={props.position}
+    
     zoom={props.zoom}
+    center={[59.312175,18.073377900000004]}
+    
+    onClick={props.onMapClick}
   >
     <TileLayer
       attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -215,13 +220,16 @@ const MyMap = props => (
         //const L = require('leaflet');
         const customMarker = L.divIcon({ html: ReactDOMServer.renderToString(<Icon perc={marker.perc}/>), className: 'custom icon'})
         return(
-      <Marker key={index} icon={customMarker}  position={[marker.latitude, marker.longitude]}>
+      <Marker key={index} icon={customMarker}   position={[marker.latitude, marker.longitude]}>
         <Popup >
-          {marker.username}.
+          {marker.username}
         </Popup>
       </Marker>
       )
     })}
   </Map>
 );
+  }
 export default withFirebase(LocatedTwo);
+
+export { MyMap };

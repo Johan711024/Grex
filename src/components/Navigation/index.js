@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import SignOutButton from '../SignOut';
@@ -7,19 +7,38 @@ import * as ROLES from '../../constants/roles';
 
 import { AuthUserContext } from '../Session';
 
-const Navigation = () => (
-  <div>
-    <AuthUserContext.Consumer>
-      {authUser =>
-        authUser ? <NavigationAuth authUser={authUser} /> : <NavigationNonAuth />
-      }
-    </AuthUserContext.Consumer>
-  </div>
-);
+
+
+class Navigation extends Component {
+  
+ 
+  render () {
+
+
+    return (
+       <div>      
+        <AuthUserContext.Consumer>
+          {authUser => { 
+            if (authUser) {
+              if (authUser.roles.includes(ROLES.ADMIN)){
+                this.props.loggedIn(this, authUser ? true : false)  
+              } 
+            }
+            
+            return authUser ? <NavigationAuth authUser={authUser} /> : <NavigationNonAuth />
+          }}
+        </AuthUserContext.Consumer>
+        </div>
+    );
+  }
+} 
+
+
 
 const NavigationAuth = ({ authUser }) => (
+
   <ul>
-    <li>
+    {/* <li>
       <Link to={ROUTES.LANDING}>Landing</Link>
     </li>
     <li>
@@ -30,27 +49,35 @@ const NavigationAuth = ({ authUser }) => (
     </li>
     <li>
       <Link to={ROUTES.ACCOUNT}>AccountX</Link>
-    </li>
-    
+    </li> */}
+{/*     
     {authUser.roles.includes(ROLES.ADMIN) && (
     <li>
     <Link to={ROUTES.ADMIN}>Admin</Link>
+    </li>   
+    )}
+    {authUser.roles.includes(ROLES.ADMIN) && (    
+    <li>
+    <Link to={ROUTES.EVENT}>Events</Link>
     </li>
     )}
     <li>
       <SignOutButton />
-    </li>
+    </li> */}
   </ul>
+  
 );
 
 const NavigationNonAuth = () => (
+
   <ul>
-    <li>
+    
+    {/* <li>
       <Link to={ROUTES.LANDING}>Landing</Link>
     </li>
     <li>
       <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-    </li>
+    </li> */}
   </ul>
 );
 

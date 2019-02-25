@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 
 import { compose } from 'recompose';
-import { AuthUserContext, withAuthorization, withEmailVerification, withGeolocated } from '../Session';
+import { AuthUserContext, withAuthorization, withEmailVerification } from '../Session';
 import { withFirebase } from '../Firebase';
 
 import LocatedTwo from '../Geolocated';
+import StatusPage from '../StatusPage';
+import SignOutButton from '../SignOut';
+import * as ROLES from '../../constants/roles';
+
+
 
 
 class HomePage extends Component {
@@ -15,34 +20,40 @@ class HomePage extends Component {
     latitude: null,
     longitude: null,
     };
+   
   }
   componentDidMount(){
+    //alert('home')
     this.props.firebase.users().on('value', snapshot => {
       this.setState({
         users: snapshot.val(),
       })
-    })
-    console.log(this.state.users)
+    })    
   }
   componentWillUnmount(){
     this.props.firebase.users().off();
   }
-  handleCoordinates = (latitude, longitude) => {
-
-  }
-
+  
   render() {
     return (
       <AuthUserContext.Consumer>
     {authUser => (
-      <div>
-        <h1>Home Page</h1>
-        <p>The Home Page is accessible by every signed in user.</p>
-      sadsadas
-      <LocatedTwo userId={authUser.uid} />
-      <Messages users={this.state.users} />
+     <div>
+      {authUser.roles.includes(ROLES.ADMIN) && (
+        <div>
+        <LocatedTwo userId={authUser.uid} />
+        <SignOutButton />  
+        </div>
+        )}
+        {!authUser.roles.includes(ROLES.ADMIN) && (
+        <div>
+        <StatusPage /> 
+        </div>
+        )}
       
+      {/* <Messages users={this.state.users} /> */}
       </div>
+     
     )}
   </AuthUserContext.Consumer>
     
