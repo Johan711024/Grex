@@ -43,6 +43,7 @@ class HomePage extends Component {
         <div>
         <LocatedTwo userId={authUser.uid} />
         <SignOutButton />  
+        
         </div>
         )}
         {!authUser.roles.includes(ROLES.ADMIN) && (

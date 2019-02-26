@@ -1,10 +1,12 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import L from 'leaflet';
 import ReactDOMServer from 'react-dom/server';
 
 import { withFirebase } from '../Firebase';
 import Icon from './SVGIconComponent';
+
+
 
 class LocatedTwo extends Component {
   constructor(props) {
@@ -68,9 +70,7 @@ class LocatedTwo extends Component {
 
   }
 
-  onListenForUsers() {    
-
-   
+  onListenForUsers() {  
 
     this.setState({ loading: true });
     this.props.firebase.users().on('value', snapshot => {
@@ -92,7 +92,6 @@ class LocatedTwo extends Component {
     
   }
   
-
   getUserPositionFromDB = () => {
     
     this.props.firebase
@@ -116,8 +115,6 @@ class LocatedTwo extends Component {
   };
 
   componentDidMount() {
- 
-
     this.onListenForUsers();    
 
     this.getUserPositionFromDB();
@@ -205,13 +202,12 @@ const MyMap = props => {
   return (
   <Map
     zoomControl={false}
-    scrollWheelZoom={false}
-    
+    scrollWheelZoom={false}    
     zoom={props.zoom}
-    center={[59.312175,18.073377900000004]}
-    
+    center={[59.312175,18.073377900000004]}    
     onClick={props.onMapClick}
   >
+
     <TileLayer
       attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"

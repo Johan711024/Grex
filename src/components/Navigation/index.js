@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import SignOutButton from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 import * as ROLES from '../../constants/roles';
 
@@ -38,7 +37,7 @@ class Navigation extends Component {
 const NavigationAuth = ({ authUser }) => (
 
   <ul>
-    {/* <li>
+     {/* <li>
       <Link to={ROUTES.LANDING}>Landing</Link>
     </li>
     <li>
@@ -49,7 +48,7 @@ const NavigationAuth = ({ authUser }) => (
     </li>
     <li>
       <Link to={ROUTES.ACCOUNT}>AccountX</Link>
-    </li> */}
+    </li>  */}
 {/*     
     {authUser.roles.includes(ROLES.ADMIN) && (
     <li>
@@ -61,9 +60,9 @@ const NavigationAuth = ({ authUser }) => (
     <Link to={ROUTES.EVENT}>Events</Link>
     </li>
     )}
-    <li>
+    { <li>
       <SignOutButton />
-    </li> */}
+    </li> } */}
   </ul>
   
 );

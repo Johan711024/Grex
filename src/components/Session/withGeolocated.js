@@ -1,7 +1,7 @@
 import React from 'react';
 import AuthUserContext from './context';
 import { withFirebase } from '../Firebase';
-import {geolocated} from 'react-geolocated';
+
 
 //HOC lets geolocated gets access to Firebase and authenticated user
 

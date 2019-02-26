@@ -15,7 +15,7 @@ import EventPage from '../Event';
 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session';
-import { AuthUserContext } from '../Session';
+
 
 import styled from 'styled-components';
 
@@ -34,34 +34,16 @@ const Item = styled.div`
   border: 1px solid #000;
   border-radius: 25px;
   padding: 20px;
-  width: ${props => props.animWidth || '30%'};
-  height: ${props => props.animHeight || '30%'};  
+
 `;
 
 class App extends Component {
   state = {
     loggedIn : false,
-    animWidth: false,
-    animHeight: false,
+
   }
   isLoggedIn = (e, loggedIn) => {
-    
-    if (loggedIn){  
-      if (!this.state.loggedIn) {
-        this.setState({ loggedIn: true });
-        this.setState({animWidth: '90%'})
-        this.setState({animHeight: '90%'})
-      }     
-      
-    }
-    else{
-      if (this.state.loggedIn) {
-        this.setState({ loggedIn: false });
-        this.setState({animWidth: '30%'})
-        this.setState({animHeight: '30%'})
-      } 
-      
-    }
+    //alert(loggedIn);
   }
 
   
@@ -70,7 +52,7 @@ class App extends Component {
     return (  
       <Router>  
       <Container>  
-          <Item animWidth={this.state.animWidth}>         
+          <Item>         
             <Navigation loggedIn={this.isLoggedIn} />
             
             <Route exact path={ROUTES.LANDING} component={LandingPage} />
